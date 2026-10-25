@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>电催化工作台</title>
+  <meta name="description" content="电催化合成方向的个人科研工作台：文献精读卡、实验记录、数据绘图、任务看板与周报生成">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <div class="shell">
+    <aside id="sidebar">
+      <div class="brand"><span class="logo">🧪</span><span class="site-name">电催化工作台</span></div>
+      <nav>
+        <a href="#/dashboard" data-route="dashboard">🏠 仪表盘</a>
+        <a href="#/papers" data-route="papers">📚 文献库</a>
+        <a href="#/lab" data-route="lab">🧫 实验记录</a>
+        <a href="#/plots" data-route="plots">📈 数据绘图</a>
+        <a href="#/board" data-route="board">🗂️ 看板与想法</a>
+        <a href="#/weekly" data-route="weekly">📝 周报生成</a>
+        <a href="#/settings" data-route="settings">⚙️ 设置</a>
+      </nav>
+      <div class="sidebar-foot">
+        v1.0 · 本地数据请定期备份<br>
+        <a href="https://github.com/DobeShadow/echem-workbench" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <button id="menuBtn" aria-label="菜单">☰</button>
+        <div id="crumb"></div>
+        <button id="themeBtn" aria-label="切换主题">🌙</button>
+      </header>
+      <main id="view"><div class="loading">加载中…</div></main>
+    </div>
+  </div>
+
+  <div id="toastWrap"></div>
+  <noscript>本站需要启用 JavaScript。</noscript>
+
+  <script src="assets/config.js"></script>
+  <script src="assets/vendor/chart.umd.min.js"></script>
+  <script src="assets/vendor/marked.min.js"></script>
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
