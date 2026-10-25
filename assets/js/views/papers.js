@@ -9,8 +9,8 @@ export async function render(el) {
 
   el.innerHTML = `
     <div class="page">
-      <div class="page-head"><h1>文献库</h1>
-        <p class="muted">共 ${papers.length} 篇精读卡 · 点击卡片查看完整内容</p></div>
+      <div class="page-head"><h1>精读卡库</h1>
+        <p class="muted">共 ${papers.length} 篇深度精读 · 点击卡片查看完整内容 · 泛读文献在「文献速录」管理</p></div>
       <div class="toolbar">
         <input id="paperSearch" class="input" type="search" placeholder="搜索标题 / DOI / 期刊 / 关键词…">
       </div>

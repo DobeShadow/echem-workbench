@@ -4,34 +4,77 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>电催化工作台</title>
-  <meta name="description" content="电催化合成方向的个人科研工作台：文献精读卡、实验记录、数据绘图、任务看板与周报生成">
+  <meta name="description" content="电催化合成方向的个人科研工作台：文献精读卡、文献速录、实验记录、数据绘图、计算工具与周报生成">
+  <meta name="theme-color" content="#3b5bfd">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
   <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
+  <!-- SVG 图标库（手绘线性图标，无外部依赖） -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.5L4.6 18a2 2 0 0 0 1.8 3h11.2a2 2 0 0 0 1.8-3L14 8.5V3"/><path d="M7.2 14.5h9.6"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></symbol>
+    <symbol id="i-kanban" viewBox="0 0 24 24"><rect x="4" y="4" width="4.5" height="11" rx="1"/><rect x="9.8" y="4" width="4.5" height="7" rx="1"/><rect x="15.6" y="4" width="4.4" height="15" rx="1"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></symbol>
+    <symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M8.5 6.5h7M8.5 11h.01M12 11h.01M15.5 11h.01M8.5 14.5h.01M12 14.5h.01M15.5 14.5h.01M8.5 18h.01M12 18h.01M15.5 18h.01"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M21 5h-7M10 5H3M21 12h-9M8 12H3M21 19h-5M12 19H3"/><path d="M14 3v4M8 10v4M16 17v4"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 10v6M14 10v6"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14L21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.8" cy="8.8" r="1.6"/><path d="M21 15.5l-5-5L5 21"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.3l6.5-.9z"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+  </svg>
+
   <div class="shell">
     <aside id="sidebar">
-      <div class="brand"><span class="logo">🧪</span><span class="site-name">电催化工作台</span></div>
+      <div class="brand">
+        <span class="brand-tile">🧪</span>
+        <span class="brand-text"><b>电催化工作台</b><i>Electrocatalysis Workbench</i></span>
+      </div>
       <nav>
-        <a href="#/dashboard" data-route="dashboard">🏠 仪表盘</a>
-        <a href="#/papers" data-route="papers">📚 文献库</a>
-        <a href="#/lab" data-route="lab">🧫 实验记录</a>
-        <a href="#/plots" data-route="plots">📈 数据绘图</a>
-        <a href="#/board" data-route="board">🗂️ 看板与想法</a>
-        <a href="#/weekly" data-route="weekly">📝 周报生成</a>
-        <a href="#/settings" data-route="settings">⚙️ 设置</a>
+        <div class="nav-group">概览</div>
+        <a href="#/dashboard" data-route="dashboard"><svg class="icon"><use href="#i-home"/></svg>仪表盘</a>
+        <div class="nav-group">文献</div>
+        <a href="#/papers" data-route="papers"><svg class="icon"><use href="#i-book"/></svg>精读卡库</a>
+        <a href="#/reading" data-route="reading"><svg class="icon"><use href="#i-bookmark"/></svg>文献速录</a>
+        <div class="nav-group">实验与数据</div>
+        <a href="#/lab" data-route="lab"><svg class="icon"><use href="#i-flask"/></svg>实验记录</a>
+        <a href="#/plots" data-route="plots"><svg class="icon"><use href="#i-chart"/></svg>数据绘图</a>
+        <a href="#/tools" data-route="tools"><svg class="icon"><use href="#i-calc"/></svg>计算工具</a>
+        <div class="nav-group">工作流</div>
+        <a href="#/board" data-route="board"><svg class="icon"><use href="#i-kanban"/></svg>看板与想法</a>
+        <a href="#/weekly" data-route="weekly"><svg class="icon"><use href="#i-file"/></svg>周报生成</a>
       </nav>
       <div class="sidebar-foot">
-        v1.0 · 本地数据请定期备份<br>
-        <a href="https://github.com/DobeShadow/echem-workbench" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        <a href="#/settings" data-route="settings" class="foot-link"><svg class="icon"><use href="#i-settings"/></svg>设置 · 备份</a>
+        <div class="foot-meta">v2.0 · <a href="https://github.com/DobeShadow/echem-workbench" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div>
       </div>
     </aside>
 
     <div class="main">
       <header class="topbar">
-        <button id="menuBtn" aria-label="菜单">☰</button>
+        <button id="menuBtn" aria-label="菜单"><svg class="icon"><use href="#i-menu"/></svg></button>
         <div id="crumb"></div>
-        <button id="themeBtn" aria-label="切换主题">🌙</button>
+        <button id="themeBtn" aria-label="切换主题"><svg class="icon"><use href="#i-moon"/></svg></button>
       </header>
       <main id="view"><div class="loading">加载中…</div></main>
     </div>

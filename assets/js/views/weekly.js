@@ -16,6 +16,7 @@ export async function render(el, ctx) {
   const tasksDone = (await all("tasks")).filter((t) => t.status === "done" && inRange(t.doneAt, range));
   const tasksOpen = (await all("tasks")).filter((t) => t.status !== "done");
   const ideas = (await all("ideas")).filter((i) => inRange(i.createdAt, range));
+  const reads = (await all("papers_list")).filter((r) => r.status === "done" && inRange(r.doneAt, range));
   if (ctx.seq !== nav.seq) return;
 
   const draft = JSON.parse(localStorage.getItem(LS_KEY(weekStart)) || "{}");
@@ -36,7 +37,7 @@ export async function render(el, ctx) {
       <div class="grid-2">
         <section class="card">
           <h2>二 · 本周阅读概览</h2>
-          <p class="small">阅读 <b>${papers.length}</b> 篇（精读 <b>${papers.length}</b>）· 实验 <b>${exps.length}</b> 条 · 完成任务 <b>${tasksDone.length}</b> 项 · 新想法 <b>${ideas.length}</b> 条</p>
+          <p class="small">阅读 <b>${papers.length + reads.length}</b> 篇（精读 <b>${papers.length}</b> · 泛读 <b>${reads.length}</b>）· 实验 <b>${exps.length}</b> 条 · 完成任务 <b>${tasksDone.length}</b> 项 · 新想法 <b>${ideas.length}</b> 条</p>
           <label>本周关键词</label>
           <input id="wKeywords" class="input" value="${esc(draft.keywords || "")}" placeholder="例：CO₂RR，Cu 单原子，FE 选择性">
         </section>
@@ -115,11 +116,16 @@ export async function render(el, ctx) {
     lines.push("");
     lines.push(`## 三、文献清单`);
     lines.push("");
-    if (chosen.length) {
+    if (chosen.length || reads.length) {
       lines.push(`| 序号 | 完整题录 | 类型 | 阅读程度 |`);
       lines.push(`|---|---|---|---|`);
-      chosen.forEach((p, i) => {
-        lines.push(`| ${i + 1} | ${citationLine(p)} | 论文 | 精读 |`);
+      let no = 1;
+      chosen.forEach((p) => {
+        lines.push(`| ${no++} | ${citationLine(p)} | 论文 | 精读 |`);
+      });
+      reads.forEach((r) => {
+        const cite = [r.title, r.journal, r.year, r.doi ? "DOI: " + r.doi : ""].filter(Boolean).join(". ");
+        lines.push(`| ${no++} | ${cite} | 论文 | 泛读 |`);
       });
     } else lines.push("（本周无）");
     lines.push("");

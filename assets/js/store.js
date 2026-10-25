@@ -2,8 +2,8 @@
 // 所有科研数据只存在浏览器本地，永不进入公开仓库；通过导出 JSON 备份。
 
 const DB_NAME = "echem-workbench";
-const DB_VERSION = 1;
-const DATA_STORES = ["experiments", "tasks", "ideas", "plots"];
+const DB_VERSION = 3;
+const DATA_STORES = ["experiments", "tasks", "ideas", "plots", "papers_list"];
 const ALL_STORES = [...DATA_STORES, "meta"];
 
 let _dbPromise = null;
@@ -18,6 +18,8 @@ function open() {
         if (!db.objectStoreNames.contains(s)) db.createObjectStore(s, { keyPath: "id" });
       }
     };
+    // 旧版本标签页还开着时会阻塞升级：给出明确提示而不是永久挂起
+    req.onblocked = () => reject(new Error("数据库升级被另一个本站标签页阻塞：请关闭本站的其他标签页后刷新本页"));
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
   });

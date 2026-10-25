@@ -95,8 +95,10 @@ export async function render(el, ctx) {
         <div class="chart-wrap"><canvas id="plotCanvas"></canvas></div>
         <div id="curveList" class="curvelist"></div>
         <div class="toolbar" id="exportBar" hidden>
+          <button id="exportPNG" class="btn btn-primary">导出 PNG 图片</button>
           <button id="exportCSV" class="btn">导出合并数据 CSV</button>
           <button id="clearCurves" class="btn btn-danger">清空曲线</button>
+          <label class="check-inline"><input type="checkbox" id="logY"> Y 轴对数（全正值数据时可用）</label>
         </div>
       </section>
     </div>`;
@@ -107,6 +109,8 @@ export async function render(el, ctx) {
   function renderChart() {
     const xLabel = el.querySelector("#xLabel").value;
     const yLabel = el.querySelector("#yLabel").value;
+    const logY = el.querySelector("#logY").checked &&
+      curves.every((c) => c.points.every((p) => p.y > 0));
     if (chart) chart.destroy();
     chart = new Chart(ctx2d, {
       type: "line",
@@ -124,12 +128,13 @@ export async function render(el, ctx) {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: { duration: 250 },
         interaction: { mode: "nearest", intersect: false },
         scales: {
           x: { type: "linear", title: { display: !!xLabel, text: xLabel } },
-          y: { title: { display: !!yLabel, text: yLabel } },
+          y: { type: logY ? "logarithmic" : "linear", title: { display: !!yLabel, text: yLabel } },
         },
-        plugins: { legend: { display: curves.length > 1 } },
+        plugins: { legend: { display: curves.length > 1, position: "bottom" } },
       },
     });
     renderCurveList();
@@ -261,6 +266,15 @@ export async function render(el, ctx) {
   });
 
   // 导出 / 清空
+  el.querySelector("#exportPNG").addEventListener("click", () => {
+    if (!chart) { toast("当前没有图表", "warn"); return; }
+    const a = document.createElement("a");
+    a.href = chart.toBase64Image("image/png", 1);
+    a.download = "plot-" + new Date().toISOString().slice(0, 10) + ".png";
+    a.click();
+    toast("已导出 PNG（可直接贴进组会 PPT / 周报）");
+  });
+  el.querySelector("#logY").addEventListener("change", renderChart);
   el.querySelector("#exportCSV").addEventListener("click", () => {
     const maxLen = Math.max(...curves.map((c) => c.points.length));
     const head = ["x_" + curves[0].name, "y_" + curves[0].name,

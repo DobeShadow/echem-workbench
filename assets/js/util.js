@@ -4,6 +4,10 @@ export const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+/** 内联 SVG 图标（图标库在 index.html 的 sprite 中） */
+export const icon = (name, cls = "") =>
+  `<svg class="icon ${cls}" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+
 export function dateISO(d = new Date()) {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -37,7 +41,7 @@ export function toast(msg, type = "info") {
   if (!wrap) return;
   const el = document.createElement("div");
   el.className = `toast toast-${type}`;
-  el.textContent = msg;
+  el.innerHTML = `${icon(type === "warn" ? "zap" : "check")}<span>${esc(msg)}</span>`;
   wrap.appendChild(el);
   setTimeout(() => el.classList.add("show"), 10);
   setTimeout(() => {

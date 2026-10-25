@@ -4,18 +4,22 @@ import { loadIndex, nav } from "./state.js";
 import * as dashboard from "./views/dashboard.js";
 import * as papers from "./views/papers.js";
 import * as paper from "./views/paper.js";
+import * as reading from "./views/reading.js";
 import * as lab from "./views/lab.js";
 import * as plots from "./views/plots.js";
+import * as tools from "./views/tools.js";
 import * as board from "./views/board.js";
 import * as weekly from "./views/weekly.js";
 import * as settings from "./views/settings.js";
 
 const routes = {
   dashboard: { view: dashboard.render, title: "仪表盘", nav: "dashboard" },
-  papers: { view: papers.render, title: "文献库", nav: "papers" },
+  papers: { view: papers.render, title: "精读卡库", nav: "papers" },
   paper: { view: paper.render, title: "精读卡", nav: "papers" },
+  reading: { view: reading.render, title: "文献速录", nav: "reading" },
   lab: { view: lab.render, title: "实验记录", nav: "lab" },
   plots: { view: plots.render, title: "数据绘图", nav: "plots" },
+  tools: { view: tools.render, title: "计算工具", nav: "tools" },
   board: { view: board.render, title: "看板与想法", nav: "board" },
   weekly: { view: weekly.render, title: "周报生成", nav: "weekly" },
   settings: { view: settings.render, title: "设置", nav: "settings" },
@@ -36,7 +40,11 @@ function applyTheme(theme) {
   document.documentElement.dataset.theme = theme;
   localStorage.setItem("wb-theme", theme);
   const btn = document.getElementById("themeBtn");
-  if (btn) btn.textContent = theme === "dark" ? "☀️" : "🌙";
+  if (btn) {
+    const use = btn.querySelector("use");
+    if (use) use.setAttribute("href", theme === "dark" ? "#i-sun" : "#i-moon");
+    else btn.textContent = theme === "dark" ? "☀️" : "🌙";
+  }
 }
 
 async function render() {
